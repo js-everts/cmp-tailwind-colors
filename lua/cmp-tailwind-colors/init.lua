@@ -61,11 +61,14 @@ M.format = function(entry, item)
   local color = to_hex(r, g, b)
 
   local hl_group = "cmp_tailwind_colors_" .. color .. a
-  local hl_opts = { fg = "#" .. color, bg = "#" .. color }
-  if a ~= nil and config.enable_alpha then
-    hl_opts.blend = 100 - (a * 100)
+
+  if vim.fn.hlexists(hl_group) == 0 then
+    local hl_opts = { fg = "#" .. color, bg = "#" .. color }
+    if a ~= nil and config.enable_alpha then
+      hl_opts.blend = 100 - (a * 100)
+    end
+    vim.api.nvim_set_hl(0, hl_group, hl_opts)
   end
-  vim.api.nvim_set_hl(0, hl_group, hl_opts)
 
   item.kind_hl_group = hl_group
   item.kind = string.rep(" ", config.width)
