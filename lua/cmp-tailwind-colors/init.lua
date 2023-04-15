@@ -54,7 +54,7 @@ M.format = function(entry, item)
   end
 
   local r, g, b, a = parse_color(doc)
-  if r == nil or g == nil or b == nil then
+  if r == nil then
     return item
   end
 
