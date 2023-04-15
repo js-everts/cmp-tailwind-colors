@@ -1,7 +1,15 @@
 local config = {
-  width = 2, -- width of color box
+  width = 2,           -- width of color box. @deprecated use format to customize the text width
   enable_alpha = true, -- requires pumblend > 0
 }
+
+config.format = function(color, _, _)
+  return {
+    text = string.rep(" ", config.width),
+    fg = color,
+    bg = color,
+  }
+end
 
 -- is there a better way to do this?
 local function parse_color(color)
@@ -22,7 +30,7 @@ local function parse_color(color)
 end
 
 local function to_hex(r, g, b)
-  return string.format("%02X%02X%02X", r, g, b)
+  return string.format("#%02X%02X%02X", r, g, b)
 end
 
 M = {}
@@ -59,11 +67,11 @@ M.format = function(entry, item)
   end
 
   local color = to_hex(r, g, b)
+  local opts = config.format(color, entry, item)
 
-  local hl_group = "cmp_tailwind_colors_" .. color .. a
-
+  local hl_group = "cmp_tailwind_colors_" .. color:sub(2) .. a
   if vim.fn.hlexists(hl_group) == 0 then
-    local hl_opts = { fg = "#" .. color, bg = "#" .. color }
+    local hl_opts = { fg = opts.fg, bg = opts.bg }
     if a ~= nil and config.enable_alpha then
       hl_opts.blend = 100 - (a * 100)
     end
@@ -71,7 +79,9 @@ M.format = function(entry, item)
   end
 
   item.kind_hl_group = hl_group
-  item.kind = string.rep(" ", config.width)
+  if opts.text ~= nil then
+    item.kind = opts.text
+  end
 
   return item
 end

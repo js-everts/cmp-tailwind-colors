@@ -13,12 +13,20 @@ Adds TailwindCSS color hints to `nvim-cmp` completion results.
 
 # Configuration
 
-Setup `cmp-tailwind-colors`. This is optional. Use it to change the default appearance.
+Setup `cmp-tailwind-colors`. This is optional. Use it to change the appearance.
+These are the defaults.
 
 ```lua
 require("cmp-tailwind-colors").setup({
-  width = 2, -- width of color box
   enable_alpha = true, -- requires pumblend > 0.
+
+  format = function(itemColor) then
+    return {
+      fg = itemColor,
+      bg = itemColor, -- or nil if you dont want a background color
+      text = "  " -- or use an icon
+    }
+  end
 })
 ```
 
