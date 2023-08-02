@@ -19,18 +19,14 @@ local function parse_color(color)
   -- parse rgb
   r, g, b = color:match("^rgb%((%d+), (%d+), (%d+)%)$")
   if r and g and b then
-    return tonumber(r), tonumber(g), tonumber(b), 1
+    return string.format("#%02X%02X%02X", tonumber(r), tonumber(g), tonumber(b)), 1
   end
 
   -- parse rgba
   r, g, b, a = color:match("^rgba%((%d+), (%d+), (%d+), (.+)%)$")
   if r and g and b and a then
-    return tonumber(r), tonumber(g), tonumber(b), tonumber(a)
+    return string.format("#%02X%02X%02X", tonumber(r), tonumber(g), tonumber(b)), tonumber(a)
   end
-end
-
-local function to_hex(r, g, b)
-  return string.format("#%02X%02X%02X", r, g, b)
 end
 
 M = {}
@@ -61,19 +57,18 @@ M.format = function(entry, item)
     return item
   end
 
-  local r, g, b, a = parse_color(doc)
-  if r == nil then
+  local hex, alpha = parse_color(doc)
+  if hex == nil then
     return item
   end
 
-  local color = to_hex(r, g, b)
-  local opts = config.format(color, entry, item)
+  local opts = config.format(hex, entry, item)
 
-  local hl_group = "cmp_tailwind_colors_" .. color:sub(2) .. a
+  local hl_group = "cmp_tailwind_colors_" .. hex:sub(2) .. alpha
   if vim.fn.hlexists(hl_group) == 0 then
     local hl_opts = { fg = opts.fg, bg = opts.bg }
     if config.enable_alpha then
-      hl_opts.blend = vim.fn.float2nr(vim.fn.round(100 - (a * 100)))
+      hl_opts.blend = vim.fn.float2nr(vim.fn.round(100 - (alpha * 100)))
     end
     vim.api.nvim_set_hl(0, hl_group, hl_opts)
   end
