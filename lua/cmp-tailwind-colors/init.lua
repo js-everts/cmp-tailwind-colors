@@ -73,7 +73,7 @@ M.format = function(entry, item)
   if vim.fn.hlexists(hl_group) == 0 then
     local hl_opts = { fg = opts.fg, bg = opts.bg }
     if config.enable_alpha then
-      hl_opts.blend = 100 - (a * 100)
+      hl_opts.blend = vim.fn.float2nr(vim.fn.round(100 - (a * 100)))
     end
     vim.api.nvim_set_hl(0, hl_group, hl_opts)
   end
