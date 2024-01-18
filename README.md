@@ -46,47 +46,41 @@ To replicate the setup shown in the screenshot above use the config below
 ```lua
 local kind_icons = {
   Text = "",
-  Method = "",
-  Function = "",
+  Method = "󰆧",
+  Function = "󰊕",
   Constructor = "",
-  Field = "",
-  Variable = "",
-  Class = "ﴯ",
+  Field = "󰇽",
+  Variable = "󰂡",
+  Class = "󰠱",
   Interface = "",
   Module = "",
-  Property = "ﰠ",
+  Property = "󰜢",
   Unit = "",
-  Value = "",
+  Value = "󰎠",
   Enum = "",
-  Keyword = "",
+  Keyword = "󰌋",
   Snippet = "",
-  Color = "",
-  File = "",
+  Color = "󰏘",
+  File = "󰈙",
   Reference = "",
-  Folder = "",
+  Folder = "󰉋",
   EnumMember = "",
-  Constant = "",
+  Constant = "󰏿",
   Struct = "",
   Event = "",
-  Operator = "",
-  TypeParameter = "",
+  Operator = "󰆕",
+  TypeParameter = "󰅲",
 }
 
 cmp.setup({
   formatting = {
     fields = { "kind", "abbr", "menu" } -- order of columns,
     format = function(entry, item)
-      if item.kind == "Color" then
+        item.menu = item.kind
         item = require("cmp-tailwind-colors").format(entry, item)
-
-        if item.kind ~= "Color" then
-          item.menu = "Color"
-          return item
+        if kind_icons[item.kind] then
+          item.kind = kind_icons[item.kind] .. " "
         end
-      end
-
-      item.menu = item.kind
-      item.kind = kind_icons[item.kind] .. " "
       return item
     end,
   },
