@@ -20,7 +20,7 @@ These are the defaults.
 require("cmp-tailwind-colors").setup({
   enable_alpha = true, -- requires pumblend > 0.
 
-  format = function(itemColor) then
+  format = function(itemColor)
     return {
       fg = itemColor,
       bg = itemColor, -- or nil if you dont want a background color
