@@ -87,3 +87,28 @@ cmp.setup({
 })
 
 ```
+
+Here is an opinionated example of lspkind.nvim integration with
+cmp-tailwind-colors. You can customize it to suit your needs.
+
+```lua
+local twc = require("cmp-tailwind-colors")
+twc.setup({
+  format = function(itemColor)
+    return { fg = itemColor, bg = nil, text = nil }
+  end,
+})
+
+local lspkindFormat = require("lspkind").cmp_format({
+    -- lspkind settings here to customize view
+})
+
+require("cmp").setup({
+  formatting = {
+    format = function(entry, item)
+      item = twc.format(entry, item)
+      return lspkindFormat(entry, item)
+    end,
+  }
+}),
+```
