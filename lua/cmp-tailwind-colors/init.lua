@@ -50,7 +50,7 @@ local function parse_color(color)
   return hex, alpha
 end
 
-M = {}
+local M = {}
 
 M.setup = function(options)
   if options == nil then
